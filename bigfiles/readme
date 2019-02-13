@@ -1,0 +1,5 @@
+Please get the input data from /project/c16:
+
+cp /project/c16/ci/sph-exa_mini-app.git/bigfiles/Evrard3D.bin .
+cp /project/c16/ci/sph-exa_mini-app.git/bigfiles/squarepatch3D.bin .
+cp /project/c16/ci/sph-exa_mini-app.git/bigfiles/squarepatch3D_1M.bin .
