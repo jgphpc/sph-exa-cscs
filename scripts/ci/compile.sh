@@ -111,7 +111,7 @@ function compile_and_run_AA() {
     CC --version
     make distclean -f Makefile.cscs
     make SRC=src/sqpatch.cpp -f Makefile.cscs
-    sbatchjg
+    #sbatchjg
 }
 
 function compile_and_run_BB() {
