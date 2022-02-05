@@ -4,7 +4,7 @@ Language:        Cpp
 AccessModifierOffset: -4
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: false
-AlignConsecutiveDeclarations: None
+AlignConsecutiveDeclarations: false
 AlignEscapedNewlines: Right
 AlignOperands:    Align
 AlignTrailingComments: true
