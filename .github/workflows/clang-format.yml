@@ -15,13 +15,16 @@ jobs:
       #    sudo apt install -y --no-install-recommends clang-format-12
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Setup tmate debug session
+        uses: mxschmitt/action-tmate@v3
+
       #- name: Checkout master
       #  run: git fetch --no-tags --depth=1 origin +refs/heads/master:refs/heads/master
-      - name: check pr
-        run: git log -n2
+#       - name: check pr
+#         run: git log -n2
       - name: clang-format
-        run: clang-format -i --style=file `find src include domain -type f`
-        # run: ./.github/scripts/clang-format.sh
-      - name: report formating issues (if any)
-        if: always()
-        run: git diff --color --exit-code
+        run: clang-format --version
+#       - name: report formating issues (if any)
+#         if: always()
+#         run: git diff --color --exit-code
