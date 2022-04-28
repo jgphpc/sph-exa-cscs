@@ -16,15 +16,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup tmate debug session
-        uses: mxschmitt/action-tmate@v3
+#       - name: Setup tmate debug session
+#         uses: mxschmitt/action-tmate@v3
+
+      - name: Install clang-format-14
+        run: |
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+          sudo chmod a+w /etc/apt/sources.list
+          echo "deb http://apt.llvm.org/focal/ llvm-toolchain-focal-14 main" >> /etc/apt/sources.list
+          sudo apt update
+          sudo apt install -y --no-install-recommends clang-format-14
 
       #- name: Checkout master
       #  run: git fetch --no-tags --depth=1 origin +refs/heads/master:refs/heads/master
 #       - name: check pr
 #         run: git log -n2
       - name: clang-format
-        run: clang-format --version
+        run: clang-format-14 --version
 #       - name: report formating issues (if any)
 #         if: always()
 #         run: git diff --color --exit-code
