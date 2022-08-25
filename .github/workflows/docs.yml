@@ -4,6 +4,9 @@ on: [push, pull_request]
 
 jobs:
   docvalidation:
+    env:
+        INPUT_SCANPATHS: 'docs/'
+        INPUT_IGNOREPATHS: ''
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,8 +25,8 @@ jobs:
 #           DOCS_DIR: 'docs/'
       - name: doc8-check
         uses: deep-entertainment/doc8-action@v1
-        with:
-          scan-paths: "/docs/source"
+        # with:
+          # scan-paths: "/docs/source"
           # ignore-paths: "/docs/_build"
       - name: Build documentation
         run: |
