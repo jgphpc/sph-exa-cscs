@@ -14,17 +14,17 @@ jobs:
       - name: Install Doc Requirements
         run: |
           python -m pip install -r docs/requirements.txt
-      - name: DOCtor-RST
-        uses: docker://oskarstark/doctor-rst
-        with:
-          args: --short --error-format=github
-        env:
-          DOCS_DIR: 'docs/'
-#       - name: doc8-check
-#         uses: deep-entertainment/doc8-action@v1
+#       - name: DOCtor-RST
+#         uses: docker://oskarstark/doctor-rst
 #         with:
-#           scan-paths: "docs"
-#           ignore-paths: "docs/_build"
+#           args: --short --error-format=github
+#         env:
+#           DOCS_DIR: 'docs/'
+      - name: doc8-check
+        uses: deep-entertainment/doc8-action@v1
+        with:
+          scan-paths: "/docs/source"
+          # ignore-paths: "/docs/_build"
       - name: Build documentation
         run: |
           make -C docs html
