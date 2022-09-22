@@ -61,6 +61,8 @@ def run_batch(timelimit, environment, task) {
 
     // avoid using the shell for variable expansion to
     // get the final command displayed in Jenkins
+    // TODO: fix this
+    def account = "jenscscs"
     try {
         sh """
         sbatch --wait \
