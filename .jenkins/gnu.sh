@@ -39,6 +39,7 @@ echo "# RUNDIR=$RUNDIR"
 mkdir -p "$RUNDIR.gnu"
 chmod 0775 "$RUNDIR.gnu"
 cd "$RUNDIR.gnu"
+INSTALLDIR=$RUNDIR/local
 # pwd
 # ls -la
 #}}}
@@ -63,7 +64,7 @@ $CMAKE \
 -DGPU_DIRECT=OFF \
 -DCMAKE_CUDA_FLAGS='-arch=sm_60' \
 -DCMAKE_BUILD_TYPE=Debug \
--DCMAKE_INSTALL_PREFIX=$PWD/local
+-DCMAKE_INSTALL_PREFIX=$INSTALLDIR
 
 # TODO: -DGPU_DIRECT=ON \
 #       -DSPH_EXA_WITH_H5PART=ON \
@@ -86,7 +87,7 @@ RFM_TRAP_JOB_ERRORS=1 reframe -r \
 --system daint:gpu \
 -n ci_unittests.*peers_perf \
 -J p=cscsci \
--S image=$PWD
+-S image=$INSTALLDIR
 
 # -J account=usup \
 # -S image=/scratch/snx3000/piccinal/jenkins.gnu/local \
