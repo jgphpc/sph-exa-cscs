@@ -71,7 +71,7 @@ $CMAKE \
 $CMAKE --build build -j 12 |& tee -a "${STAGE_NAME}.out"
 # $CMAKE --build build -t sphexa -j 12 |& tee -a "${STAGE_NAME}.out"
 
-cmake --install build |& tee -a "${STAGE_NAME}.out"
+$CMAKE --install build |& tee -a "${STAGE_NAME}.out"
 
 # find $PWD/local -type f |& tee -a "${STAGE_NAME}.out"
 #}}}
