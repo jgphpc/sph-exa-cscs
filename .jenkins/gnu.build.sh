@@ -48,12 +48,12 @@ cmake -S "${WORKSPACE}" \
     -DCMAKE_CUDA_FLAGS='-arch=sm_60' \
     -DCMAKE_BUILD_TYPE=Debug \
     -DCMAKE_INSTALL_PREFIX=$PWD/local
+    # -DSPH_EXA_WITH_H5PART=ON \
 
 cmake --build build -t sphexa -j 12 |& tee -a "${STAGE_NAME}.out"
 find $PWD/local -type f
 
 # cmake --install build 
-    # -DSPH_EXA_WITH_H5PART=ON \
 
 #    "${WORKSPACE}" |& tee -a "${STAGE_NAME}.out"
 
