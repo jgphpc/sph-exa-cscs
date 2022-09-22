@@ -15,7 +15,10 @@ set -o pipefail
 
 #{{{ pe
 module avail
-echo
+echo "xxxx"
+ls -la /etc/profile.d/
+ls -la /etc/bash*
+echo "xxxx"
 module swap PrgEnv-cray PrgEnv-gnu
 # module load PrgEnv-gnu
 module load cdt/22.05
