@@ -1,10 +1,10 @@
 #!/bin/bash -l
 #SBATCH --export=ALL
-#SBATCH --constraint="mc"
-#SBATCH --partition="cscsci"
+#SBATCH --constraint=gpu
+#SBATCH --partition=cscsci
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
-#SBATCH --cpus-per-task=1
+##SBATCH --ntasks-per-node=1
+##SBATCH --cpus-per-task=1
 
 set -o errexit
 set -o nounset
