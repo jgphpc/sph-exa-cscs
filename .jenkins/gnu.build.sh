@@ -18,8 +18,8 @@ module list -t
 CC --version
 nvcc --version
 # module unload cray-libsci_acc
-CMAKE=/project/c32/src/cmake-3.24.2-linux-x86_64/bin/cmake
 # export PATH=/project/c32/src/cmake-3.24.2-linux-x86_64/bin:$PATH
+CMAKE=/apps/daint/UES/jenkins/7.0.UP03/21.09/daint-gpu/software/CMake/3.22.1/bin/cmake
 which $CMAKE
 $CMAKE --version
 
