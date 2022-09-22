@@ -14,8 +14,10 @@ set -o nounset
 set -o pipefail
 
 #{{{ pe
-module list
-module swap PrgEnv-cray PrgEnv-gnu
+module avail
+echo
+# module swap PrgEnv-cray PrgEnv-gnu
+module load PrgEnv-gnu
 module load cdt/22.05
 module load nvhpc-nompi/22.2
 module load cray-hdf5-parallel/1.12.1.3
