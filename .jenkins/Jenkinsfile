@@ -65,7 +65,8 @@ def run_lnode(environment) {
     // get the final command displayed in Jenkins
     try {
         sh """
-        bash ./${ln_script}
+        ceho $SHELL
+        bash -l ./${ln_script}
         """
     }
     finally {
