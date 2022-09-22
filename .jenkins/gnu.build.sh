@@ -5,6 +5,7 @@
 #SBATCH --nodes=1
 ##SBATCH --ntasks-per-node=1
 ##SBATCH --cpus-per-task=1
+### user = jenkssl
 
 set -o errexit
 set -o nounset
@@ -56,8 +57,9 @@ $CMAKE \
 
 $CMAKE --build build -j 12 |& tee -a "${STAGE_NAME}.out"
 # $CMAKE --build build -t sphexa -j 12 |& tee -a "${STAGE_NAME}.out"
-find $PWD/local -type f |& tee -a "${STAGE_NAME}.out"
 
 cmake --install build |& tee -a "${STAGE_NAME}.out"
+
+find $PWD/local -type f |& tee -a "${STAGE_NAME}.out"
 
 # make VERBOSE=1 -j |& tee -a "${STAGE_NAME}.out"
