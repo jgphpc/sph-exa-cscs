@@ -1,6 +1,5 @@
 #!/bin/bash -l
 
-
 ###SBATCH --export=ALL
 #SBATCH --constraint=gpu
 #SBATCH --partition=cscsci
