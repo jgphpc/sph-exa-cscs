@@ -9,7 +9,7 @@ pipeline {
                     stages {
                         stage('build') {
                             steps {
-                                run_lnode("gnu", "build")
+                                run_lnode("gnu")
                                 // run_batch("0:10:00", "gnu", "build")
                             }
                         }
@@ -55,16 +55,17 @@ pipeline {
     }
 }
 
-def run_lnode(environment, task) {
+def run_lnode(environment) {
     // def (account, basename) = env.JOB_NAME.split('/')
-    def sbatch_script = ".jenkins/${environment}.${task}.sh"
+    // def sbatch_script = ".jenkins/${environment}.${task}.sh"
     // def sbatch_out = "sbatch.${env.BUILD_TAG}.${environment}.${task}.out"
+    def ln_script = ".jenkins/${environment}.sh"
 
     // avoid using the shell for variable expansion to
     // get the final command displayed in Jenkins
     try {
         sh """
-        ./${sbatch_script}
+        ./${ln_script}
         """
     }
     finally {
