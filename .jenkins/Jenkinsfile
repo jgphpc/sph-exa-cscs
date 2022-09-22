@@ -65,7 +65,7 @@ def run_lnode(environment) {
     // get the final command displayed in Jenkins
     try {
         sh """
-        ./${ln_script}
+        bash -c ./${ln_script}
         """
     }
     finally {

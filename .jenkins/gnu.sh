@@ -8,7 +8,7 @@
 ##SBATCH --cpus-per-task=1
 ### user = jenkssl
 
-source /etc/profile
+# source /etc/profile
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -16,8 +16,7 @@ set -o pipefail
 #{{{ pe
 module avail
 echo "xxxx"
-ls -la /etc/profile.d/
-ls -la /etc/bash*
+module list
 echo "xxxx"
 module swap PrgEnv-cray PrgEnv-gnu
 # module load PrgEnv-gnu
