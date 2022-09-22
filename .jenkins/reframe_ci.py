@@ -1,17 +1,17 @@
 # MIT License
-# 
+#
 # Copyright (c) 2022 CSCS, ETH Zurich
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
 # in the Software without restriction, including without limitation the rights
 # to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 # copies of the Software, and to permit persons to whom the Software is
 # furnished to do so, subject to the following conditions:
-# 
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-# 
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 # IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 # FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -19,7 +19,7 @@
 # LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
-# 
+#
 # @author jgphpc
 import os
 import sys
@@ -27,21 +27,6 @@ import reframe as rfm
 import reframe.utility.sanity as sn
 import reframe.utility.udeps as udeps
 
-
-# RFM_TRAP_JOB_ERRORS=1 reframe -c
-# /scratch/snx3000/piccinal/DEL/jenkins/sph-exa-cscs.git/.jenkins/reframe_ci.py
-# --system daint:gpu -n ci_unittests.*peers_perf -r -J p=debug -J account=usup
-# --keep-stage-files
-
-# RFM_TRAP_JOB_ERRORS=1 ~/R -c NEW/reframe_ci.py -n ci --system daint:gpu \
-# -S image=jfrog.svc.cscs.ch/contbuild/testing/anfink/44692846847247/sph-exa_build \
-# -S build_type=cuda -J p=cscsci -r
-_unittests = [
-    # RFM_TRAP_JOB_ERRORS
-    # "lsx",
-    # "ls",
-    "/usr/local/sbin/coord_samples/coordinate_test",
-]
 
 # {{{ unittests
 unittests = [
@@ -63,9 +48,9 @@ unittests = [
     "/usr/local/sbin/integration_mpi/treedomain",
     # new:
     "/usr/local/sbin/performance/neighbors_test_gpu",
-    "/usr/local/sbin/integration_mpi/assignment_gpu",       # -N2 -n2 -pdebug
-    "/usr/local/sbin/integration_mpi/domain_gpu",           # -N2 -n2 -pdebug
-    "/usr/local/sbin/integration_mpi/exchange_domain_gpu",  # -N2 -n2 -pdebug
+    # "/usr/local/sbin/integration_mpi/assignment_gpu",       # -N2 -n2 -pdebug
+    # "/usr/local/sbin/integration_mpi/domain_gpu",           # -N2 -n2 -pdebug
+    # "/usr/local/sbin/integration_mpi/exchange_domain_gpu",  # -N2 -n2 -pdebug
     #
     "/usr/local/sbin/performance/hilbert_perf",
     "/usr/local/sbin/performance/hilbert_perf_gpu",
@@ -82,19 +67,10 @@ unittests = [
     "/usr/local/sbin/unit/component_units_omp",
     "/usr/local/sbin/unit_cuda/component_units_cuda",
 ]
-
-# local/bin/sedov_solution
-# local/bin/compare_noh.py
-# local/bin/sphexa-cuda
-# local/bin/sphexa
-# local/bin/compare_solutions.py
-
 # }}}
 
 # {{{ unittests_params
 unittests_params = {
-    'lsx': "1",
-    'ls': "1",
     "/usr/local/sbin/unit_cuda/component_units_cuda": "g",
     "/usr/local/sbin/coord_samples/coordinate_test": "1",
     "/usr/local/sbin/hydro/kernel_tests_ve": "1",
@@ -112,7 +88,6 @@ unittests_params = {
     "/usr/local/sbin/integration_mpi/exchange_halos": "2",
     "/usr/local/sbin/integration_mpi/focus_tree": "5",
     "/usr/local/sbin/integration_mpi/domain_nranks": "5",
-    "/usr/local/sbin/integration_mpi/exchange_halos_gpu": "2",
     "/usr/local/sbin/integration_mpi/focus_transfer": "2",
     #
     "/usr/local/sbin/unit/component_units_omp": "1",
@@ -128,19 +103,22 @@ unittests_params = {
     "/usr/local/sbin/performance/octree_perf_gpu": "g",
     "/usr/local/sbin/performance/peers_perf": "1",
     "/usr/local/sbin/performance/octree_perf": "1",
-    # "/usr/local/sbin/performance/neighbors_test_gpu": "g",
+    "/usr/local/sbin/performance/hilbert_perf": "1",
+    "/usr/local/sbin/performance/scan_perf": "1",
+    "/usr/local/sbin/performance/neighbors_test_gpu": "g",
     # --> /usr/local/sbin/performance/cudaNeighborsTest
-    # "/usr/local/sbin/performance/hilbert_perf": "1",
-    # "/usr/local/sbin/performance/scan_perf": "1",
     #
+    # require more than 1 compute node:
     "/usr/local/sbin/integration_mpi/assignment_gpu": "2",
     "/usr/local/sbin/integration_mpi/domain_gpu": "2",
-    "/usr/local/sbin/integration_mpi/exchange_domain_gpu": "2", # -pdebug
+    "/usr/local/sbin/integration_mpi/exchange_domain_gpu": "2",
+    "/usr/local/sbin/integration_mpi/exchange_halos_gpu": "2",
 }
 # TODO: https://sarus.readthedocs.io/en/stable/cookbook/gpu/gpudirect.html
 # }}}
 
-#{{{ 2022/08: ci unittests
+
+# {{{ ci unittests / 1cn
 @rfm.simple_test
 class ci_unittests(rfm.RunOnlyRegressionTest):
     valid_systems = ['dom:gpu', 'daint:gpu', 'hohgant:mc']
@@ -149,11 +127,6 @@ class ci_unittests(rfm.RunOnlyRegressionTest):
     unittest = parameter(unittests)
     sourcesdir = None
     num_tasks = 1
-
-#     @run_before('run')
-#     def set_pe(self):
-#         if self.current_environ.name not in ['hohgant']:
-#             modules = ['sarus']
 
     @run_before('run')
     def set_executable(self):
@@ -164,20 +137,21 @@ class ci_unittests(rfm.RunOnlyRegressionTest):
         if unittests_params[self.unittest] in ["2", "5"]:
             self.num_tasks = int(unittests_params[self.unittest])
 
-        # TODO: -pdebug ?
-        if self.unittest.split('/')[-1] in [
-            'exchange_halos_gpu', 'assignment_gpu', 'domain_gpu',
-            'exchange_domain_gpu'
-        ]:
-            self.num_tasks_per_node = 1
+    @run_before('run')
+    def set_skip(self):
+        test = self.unittest.split('/')[-1]
+        need_2cn = ['exchange_halos_gpu', 'assignment_gpu', 'domain_gpu',
+                    'exchange_domain_gpu']
+        self.skip_if(test in need_2cn, f'{test} needs 2 cn')
 
-#         self.job.launcher.options = [
-#             'sarus', 'run', mpiflag,
-#             f'{self.image}:{self.build_type}',
-#         ]
-#        self.executable = self.unittest
+#del         if self.unittest.split('/')[-1] in [
+#del             'exchange_halos_gpu', 'assignment_gpu', 'domain_gpu',
+#del             'exchange_domain_gpu'
+#del         ]:
+#del             self.num_tasks_per_node = 1
+#del         # TODO: -pdebug
 
-    #{{{ sanity
+    # {{{ sanity
     @sanity_function
     def assert_sanity(self):
         skip = [
@@ -194,138 +168,170 @@ class ci_unittests(rfm.RunOnlyRegressionTest):
             return sn.all([
                 sn.assert_found(r'PASS', self.stdout),
                 ])
-    #}}}
-#}}}
+    # }}}
+# }}}
 
-#{{{ 2022/08: cpu tests
+
+# {{{ ci unittests / 2cn
 @rfm.simple_test
-class ci_cputests(rfm.RunOnlyRegressionTest):
-    # ms sarus/1.4.2 # do not use 1.5 to pull images
-    # sarus pull --login art.cscs.ch/contbuild/testing/jg/ \
-    #                    sph-exa_install:cuda_debug-gpud
-    # descr = 'run unittests'
+class ci_2cn(rfm.RunOnlyRegressionTest):
     valid_systems = ['dom:gpu', 'daint:gpu', 'hohgant:mc']
     valid_prog_environs = ['builtin']
-    image = variable(str,
-                     value='jfrog.svc.cscs.ch/contbuild/testing/anfink/9590261141699040/pasc/sphexa/sph-exa_install')
-                     # value='art.cscs.ch/contbuild/testing/jg/sph-exa_install')
-    build_type = variable(str, value='pr287')
-    # build_type = parameter(['cuda'])
-    # build_type = parameter(['cuda_debug-gpud', 'cuda_release-gpud'])
+    image = variable(str, value='/usr/local')
+    unittest = parameter(unittests)
+    sourcesdir = None
+    num_tasks = 1
+
+    @run_before('run')
+    def set_executable(self):
+        self.executable = self.unittest.replace("/usr/local", self.image)
+
+    @run_before('run')
+    def set_ntasks(self):
+        self.num_tasks_per_node = 1
+        if unittests_params[self.unittest] in ["2", "5"]:
+            self.num_tasks = int(unittests_params[self.unittest])
+
+    @run_before('run')
+    def set_skip(self):
+        test = self.unittest.split('/')[-1]
+        need_2cn = ['exchange_halos_gpu', 'assignment_gpu', 'domain_gpu',
+                    'exchange_domain_gpu']
+        self.skip_if(test not in need_2cn, f'{test} needs only 1 cn')
+
+    # {{{ sanity
+    @sanity_function
+    def assert_sanity(self):
+        skip = [
+            '/usr/local/sbin/performance/peers_perf',
+            '/usr/local/sbin/performance/octree_perf_gpu',
+            '/usr/local/sbin/performance/octree_perf',
+            '/usr/local/sbin/performance/hilbert_perf_gpu',
+            '/usr/local/sbin/performance/hilbert_perf',
+            '/usr/local/sbin/performance/neighbors_test_gpu',
+        ]
+        if self.unittest in skip:
+            return sn.all([sn.assert_not_found(r'error', self.stdout)])
+        else:
+            return sn.all([
+                sn.assert_found(r'PASS', self.stdout),
+                ])
+    # }}}
+# }}}
+
+
+# {{{ cpu tests
+@rfm.simple_test
+class ci_cputests(rfm.RunOnlyRegressionTest):
+    valid_systems = ['dom:gpu', 'daint:gpu', 'hohgant:mc']
+    valid_prog_environs = ['builtin']
+    image = variable(str, value='/usr/local')
     unittest = parameter(['sedov', 'sedov --ve', 'noh'])
     sourcesdir = None
     num_tasks = 1
-    # num_tasks_per_node = 1
-    modules = ['sarus']
+    modules = ['PrgEnv-gnu', 'cdt/22.05', 'nvhpc-nompi/22.2',
+               'cray-hdf5-parallel/1.12.1.3']
 
+    # {{{ hooks
     @run_before('run')
-    def set_sarus(self):
-        mpiflag = '--mpi'
-        hdf5path = '/usr/local/HDF_Group/HDF5/1.13.2/lib'
-        self.job.launcher.options = [
-            'sarus', 'run', mpiflag,
-            f'{self.image}:{self.build_type}',
-            'bash', '-c',
-            f'"LD_LIBRARY_PATH={hdf5path}:$LD_LIBRARY_PATH ',  # note the space
-            # 'MPICH_RDMA_ENABLED_CUDA=1 ',
-            # 'LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libcuda.so ',
-            '/usr/local/bin/sphexa', '--init',
-        ]
-        self.executable = self.unittest
-        self.executable_opts = ['-s', '1', '-n', '50', '"']
-        #self.variables = {
-        #    'LD_LIBRARY_PATH': ''
-        #}
+    def set_gpu_executable(self):
+        self.executable = os.path.join(self.image, 'bin', 'sphexa')
+        self.executable_opts = ['--init', self.unittest, '-s', '1', '-n', '50']
+        self.variables = {
+                'LD_LIBRARY_PATH': '$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH',
+                # 'HDF5_DISABLE_VERSION_CHECK': '1',
+        }
+    # }}}
 
-    #{{{ sanity
+    # {{{ sanity
     @sanity_function
     def assert_sanity(self):
         regex1 = r'Total execution time of \d+ iterations of \S+ up to t ='
         return sn.all([
             sn.assert_found(regex1, self.stdout),
         ])
-    #}}}
-#}}}
+    # }}}
+# }}}
 
-#{{{ 2022/08: gpu tests
+
+# {{{ gpu tests
 @rfm.simple_test
 class ci_gputests(rfm.RunOnlyRegressionTest):
-    # ms sarus/1.4.2 # do not use 1.5 to pull images
-    # sarus pull --login art.cscs.ch/contbuild/testing/jg/ \
-    #                    sph-exa_install:cuda_debug-gpud
-    # descr = 'run unittests'
     valid_systems = ['dom:gpu', 'daint:gpu', 'hohgant:mc']
     valid_prog_environs = ['builtin']
-    # jfrog = 'art.cscs.ch/contbuild/testing/jg'
-    jfrog = 'jfrog.svc.cscs.ch/contbuild/testing/anfink'
-    image = variable(str, value=f'{jfrog}/9590261141699040/pasc/sphexa/sph-exa_install')
-    build_type = variable(str, value='pr287')
-    # build_type = parameter(['cuda'])
-    # build_type = parameter(['cuda_debug-gpud', 'cuda_release-gpud',
-    #                         'cuda_debug_plus_gpud',
-    #                         'cuda_release_plus_gpud'])
+    image = variable(str, value='/usr/local')
     unittest = parameter(['sedov', 'noh', 'evrard'])
     sourcesdir = None
     num_tasks = 1
-    # num_tasks_per_node = 1
-    modules = ['sarus']
+    modules = ['PrgEnv-gnu', 'cdt/22.05', 'nvhpc-nompi/22.2',
+               'cray-hdf5-parallel/1.12.1.3']
+    in_glass = variable(str, value='glass.h5')
+
+    # {{{ hooks
+    @run_before('run')
+    def set_gpu_executable(self):
+        self.executable = os.path.join(self.image, 'bin', 'sphexa-cuda')
+        self.executable_opts = ['--init', self.unittest]
+        self.variables = {
+                'LD_LIBRARY_PATH': '$CRAY_LD_LIBRARY_PATH:$LD_LIBRARY_PATH',
+                # 'HDF5_DISABLE_VERSION_CHECK': '1',
+        }
 
     @run_before('run')
-    def set_sarus(self):
-        mpiflag = '--mpi'
-        hdf5path = '/usr/local/HDF_Group/HDF5/1.13.2/lib'   # <------------
-        mountflag = ('--mount=type=bind,source="$PWD",'
-                     'destination="/scratch"')
-        if self.unittest in ['evrard']:
-            glass_cp = 'cp /scratch/glass.h5 . ;'
-        else:
-            glass_cp = ''
-
-        self.job.launcher.options = [
-            'sarus', 'run', mpiflag, mountflag,
-            f'{self.image}:{self.build_type}',
-            'bash', '-c',
-            f'"{glass_cp} LD_LIBRARY_PATH={hdf5path}:$LD_LIBRARY_PATH ',
-            # note the space
-            'MPICH_RDMA_ENABLED_CUDA=1 ',
-            'LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libcuda.so ',
-            '/usr/local/bin/sphexa-cuda', '--init',  # NOTE: -cuda
-        ]
-        self.executable = self.unittest
+    def set_input(self):
         in_path = 'ftp://ftp.cscs.ch/out/jgp/hpc/containers/in'
-        in_file = 'glass.h5'
         if self.unittest in ['evrard']:
-            self.prerun_cmds = [f'wget --quiet {in_path}/{in_file}']
+            self.prerun_cmds = [f'wget --quiet {in_path}/{self.in_glass}']
 
+    @run_before('run')
+    def set_output(self):
         fields = '-f rho,p,u,x,y,z,vx,vy,vz'
         opts = {
-            # 'sedov': '-s 200 -n 50 -w 200 --quiet;',
-            'sedov': f'{fields} -s 200 -n 50 -w 200 --outDir /scratch/ ',
-            'noh': f'{fields} -s 200 -n 50 -w 200 --outDir /scratch/ ',
-            'evrard': (f'--glass {in_file} -s 10 -n 50 '
-                       '-w 10 --outDir /scratch/ '),  # NOTE: no "
-        }
-        compare_executable = ';ln -fs /usr/local/bin/sedov_solution .;'
-        compare = {
-            'sedov': ('python3 /usr/local/bin/compare_solutions.py -s 200 '
-                      '/scratch/dump_sedov.h5 > /scratch/sedov.rpt "'),
-            'noh': ('python3 /usr/local/bin/compare_noh.py -s 200 '
-                    '/scratch/dump_noh.h5 > /scratch/noh.rpt "'),
-            'evrard': ('echo -e \\"Density L1 error 0.0\\nPressure L1 '
-                       'error 0.0\\nVelocity L1 error 0.0\\n\\" > '
-                       '/scratch/evrard.rpt "')
+            # --outDir /scratch
+            'sedov': f'{fields} -s 200 -n 50 -w 200 ',
+            'noh': f'{fields} -s 200 -n 50 -w 200 ',
+            'evrard': (f'--glass {self.in_glass} -s 10 -n 50 -w 10')
         }
         self.executable_opts = [
+            '--init', self.unittest,
             opts[self.unittest],
-            compare_executable,
-            compare[self.unittest]
-        ]
-        self.postrun_cmds = [
-            'cat *.rpt',
-            '# "https://reframe-hpc.readthedocs.io/en/stable/manpage.html?'
-            'highlight=RFM_TRAP_JOB_ERRORS',
         ]
 
+    @run_before('run')
+    def set_compare(self):
+        compare_executable = os.path.join(self.image, 'bin', 'sedov_solution')
+        self.postrun_cmds = [
+            f'ln -s {compare_executable}',
+            'python3 -m venv --system-site-packages myvenv',
+            'source myvenv/bin/activate',
+            'pip install -U pip h5py matplotlib',
+        ]
+        if self.unittest == 'sedov':
+            script = os.path.join(self.image, 'bin', 'compare_solutions.py')
+            self.postrun_cmds += [
+                f'python3 {script} -s 200 ./dump_sedov.h5 > sedov.rpt',
+            ]
+        elif self.unittest == 'noh':
+            script = os.path.join(self.image, 'bin', 'compare_noh.py')
+            self.postrun_cmds += [
+                f'python3 {script} -s 200 ./dump_noh.h5 > noh.rpt',
+            ]
+        elif self.unittest == 'evrard':
+            rpt = 'evrard.rpt'
+            self.postrun_cmds += [
+                f'echo Density L1 error 0.0 > {rpt}',
+                f'echo Pressure L1 error 0.0 >> {rpt}',
+                f'echo Velocity L1 error 0.0 >> {rpt}',
+            ]
+
+        self.postrun_cmds += [
+            'cat *.rpt',
+            '# https://reframe-hpc.readthedocs.io/en/stable/manpage.html?'
+            'highlight=RFM_TRAP_JOB_ERRORS',
+        ]
+    # }}}
+
+    # {{{ perf
     @performance_function('')
     def extract_L1(self, metric='Density'):
         if metric not in ('Density', 'Pressure', 'Velocity', 'Energy'):
@@ -347,7 +353,7 @@ class ci_gputests(rfm.RunOnlyRegressionTest):
     def set_reference(self):
         reference_d = {
             'sedov': {
-                'Density':  (0.138, -0.01, 0.01, ''),
+                'Density':  (0.138, -0.015, 0.01, ''),
                 'Pressure':  (0.902, -0.01, 0.01, ''),
                 'Velocity':  (0.915, -0.01, 0.01, ''),
                 # 'Energy':  (0., -0.05, 0.05, ''),
@@ -366,13 +372,14 @@ class ci_gputests(rfm.RunOnlyRegressionTest):
             },
         }
         self.reference = {'*': reference_d[self.unittest]}
+    # }}}
 
-    #{{{ sanity
+    # {{{ sanity
     @sanity_function
     def assert_sanity(self):
         regex1 = r'Total execution time of \d+ iterations of \S+ up to t ='
         return sn.all([
             sn.assert_found(regex1, self.stdout),
         ])
-    #}}}
-#}}}
+    # }}}
+# }}}

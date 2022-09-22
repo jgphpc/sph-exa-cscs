@@ -7,7 +7,7 @@ pipeline {
             parallel {
                 stage("GNU") {
                     stages {
-                        stage('build') {
+                        stage('build and test') {
                             steps {
                                 // run_vnode("gnu")
                                 run_batch("0:30:00", "gnu", "build")
@@ -80,23 +80,20 @@ def run_batch(timelimit, environment, task) {
     }
 }
 
-def run_vnode(environment) {
-    // def (account, basename) = env.JOB_NAME.split('/')
-    // def sbatch_script = ".jenkins/${environment}.${task}.sh"
-    // def sbatch_out = "sbatch.${env.BUILD_TAG}.${environment}.${task}.out"
-    def ln_script = ".jenkins/${environment}.sh"
-
-    // avoid using the shell for variable expansion to
-    // get the final command displayed in Jenkins
-    try {
-        sh """
-        bash -c ./${ln_script}
-        """
-    }
-    finally {
-        echo readFile("${sbatch_out}")
-    }
-}
+// def run_vnode(environment) {
+//     def ln_script = ".jenkins/${environment}.sh"
+// 
+//     // avoid using the shell for variable expansion to
+//     // get the final command displayed in Jenkins
+//     try {
+//         sh """
+//         bash -c ./${ln_script}
+//         """
+//     }
+//     finally {
+//         echo readFile("${sbatch_out}")
+//     }
+// }
 
 
 // vim: set filetype=groovy ts=4 sw=4 tw=0 :

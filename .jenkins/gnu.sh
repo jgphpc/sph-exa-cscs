@@ -81,14 +81,28 @@ $CMAKE --install build |& tee -a "${STAGE_NAME}.out"
 tar xf /scratch/snx3000/piccinal/jenkins.gnu/local.tar
 # local/bin/
 
+# 1 compute node jobs:
 RFM_TRAP_JOB_ERRORS=1 reframe -r \
 --keep-stage-files \
 -c $WORKSPACE/.jenkins/reframe_ci.py \
 --system daint:gpu \
--n ci_unittests.*peers_perf \
+-n ci_unittests \
+-n ci_cputests \
+-n ci_gputests \
 -J p=cscsci \
 -S image=$INSTALLDIR
 
+# 2 compute node jobs:
+RFM_TRAP_JOB_ERRORS=1 reframe -r \
+--keep-stage-files \
+-c $WORKSPACE/.jenkins/reframe_ci.py \
+--system daint:gpu \
+-n ci_2cn \
+-J p=normal \
+-S image=$INSTALLDIR
+
+
 # -J account=usup \
+# -n ci_unittests.*peers_perf \
 # -S image=/scratch/snx3000/piccinal/jenkins.gnu/local \
 #}}}
