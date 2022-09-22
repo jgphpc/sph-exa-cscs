@@ -15,13 +15,12 @@ module load cdt/22.05
 module load nvhpc-nompi/22.2
 module load cray-hdf5-parallel/1.12.1.3
 module list -t
-CC --version
-nvcc --version
 # module unload cray-libsci_acc
 # export PATH=/project/c32/src/cmake-3.24.2-linux-x86_64/bin:$PATH
 CMAKE=/apps/daint/UES/jenkins/7.0.UP03/21.09/daint-gpu/software/CMake/3.22.1/bin/cmake
-which $CMAKE
-$CMAKE --version
+CC --version ;echo
+nvcc --version ; echo
+$CMAKE --version ;echo
 
 set -o xtrace  # do not set earlier to avoid noise from module
 umask 0002  # make sure group members can access the data
@@ -52,13 +51,13 @@ $CMAKE \
     -DCMAKE_CUDA_FLAGS='-arch=sm_60' \
     -DCMAKE_BUILD_TYPE=Debug \
     -DCMAKE_INSTALL_PREFIX=$PWD/local
-    # -DSPH_EXA_WITH_H5PART=ON \
 
-$CMAKE --build build -t sphexa -j 12 |& tee -a "${STAGE_NAME}.out"
-find $PWD/local -type f
+# -DSPH_EXA_WITH_H5PART=ON \
 
-# cmake --install build 
+$CMAKE --build build -j 12 |& tee -a "${STAGE_NAME}.out"
+# $CMAKE --build build -t sphexa -j 12 |& tee -a "${STAGE_NAME}.out"
+find $PWD/local -type f |& tee -a "${STAGE_NAME}.out"
 
-#    "${WORKSPACE}" |& tee -a "${STAGE_NAME}.out"
+cmake --install build |& tee -a "${STAGE_NAME}.out"
 
 # make VERBOSE=1 -j |& tee -a "${STAGE_NAME}.out"
