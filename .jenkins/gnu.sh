@@ -33,12 +33,12 @@ $CMAKE --version ;echo
 #{{{ rundir
 set -o xtrace  # do not set earlier to avoid noise from module
 umask 0002  # make sure group members can access the data
-RUNDIR=$SCRATCH/$BUILD_TAG
+RUNDIR=$SCRATCH/$BUILD_TAG.gnu
 echo "# WORKSPACE=$WORKSPACE"
 echo "# RUNDIR=$RUNDIR"
-mkdir -p "$RUNDIR.gnu"
-chmod 0775 "$RUNDIR.gnu"
-cd "$RUNDIR.gnu"
+mkdir -p "$RUNDIR"
+chmod 0775 "$RUNDIR"
+cd "$RUNDIR"
 INSTALLDIR=$RUNDIR/local
 # pwd
 # ls -la
