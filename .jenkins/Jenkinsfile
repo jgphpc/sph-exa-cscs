@@ -65,7 +65,6 @@ def run_lnode(environment) {
     // get the final command displayed in Jenkins
     try {
         sh """
-        source /etc/profile
         ./${ln_script}
         """
     }
