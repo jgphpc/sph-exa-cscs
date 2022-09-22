@@ -18,9 +18,10 @@ module list -t
 CC --version
 nvcc --version
 # module unload cray-libsci_acc
-export PATH=/project/c32/src/cmake-3.24.2-linux-x86_64/bin:$PATH
-which cmake
-cmake --version
+CMAKE=/project/c32/src/cmake-3.24.2-linux-x86_64/bin/cmake
+# export PATH=/project/c32/src/cmake-3.24.2-linux-x86_64/bin:$PATH
+which $CMAKE
+$CMAKE --version
 
 set -o xtrace  # do not set earlier to avoid noise from module
 umask 0002  # make sure group members can access the data
@@ -40,7 +41,8 @@ ls -la
 # sed -i "s@GIT_TAG@#GIT_TAG @" ./domain/cmake/setup_GTest.cmake \
 # sed -i "s@GIT_TAG@#GIT_TAG @" ./ryoanji/cmake/setup_GTest.cmake \
 
-cmake -S "${WORKSPACE}" \
+$CMAKE \
+    -S "${WORKSPACE}" \
     -B build \
     -DCMAKE_CXX_COMPILER=CC \
     -DCMAKE_C_COMPILER=cc \
@@ -52,7 +54,7 @@ cmake -S "${WORKSPACE}" \
     -DCMAKE_INSTALL_PREFIX=$PWD/local
     # -DSPH_EXA_WITH_H5PART=ON \
 
-cmake --build build -t sphexa -j 12 |& tee -a "${STAGE_NAME}.out"
+$CMAKE --build build -t sphexa -j 12 |& tee -a "${STAGE_NAME}.out"
 find $PWD/local -type f
 
 # cmake --install build 
