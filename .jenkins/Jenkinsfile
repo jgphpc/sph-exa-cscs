@@ -9,7 +9,8 @@ pipeline {
                     stages {
                         stage('build') {
                             steps {
-                                run_batch("0:10:00", "gnu", "build")
+                                run_lnode("gnu", "build")
+                                // run_batch("0:10:00", "gnu", "build")
                             }
                         }
 //                         stage('test') {
@@ -54,6 +55,24 @@ pipeline {
     }
 }
 
+def run_lnode(environment, task) {
+    // def (account, basename) = env.JOB_NAME.split('/')
+    def sbatch_script = ".jenkins/${environment}.${task}.sh"
+    // def sbatch_out = "sbatch.${env.BUILD_TAG}.${environment}.${task}.out"
+
+    // avoid using the shell for variable expansion to
+    // get the final command displayed in Jenkins
+    try {
+        sh """
+        ./${sbatch_script}
+        """
+    }
+    finally {
+        echo readFile("${sbatch_out}")
+    }
+}
+
+// /scratch/snx3000/jenkssl/jenkins-c32-sphexa-21.gnu/local/bin/sphexa-cuda
 def run_batch(timelimit, environment, task) {
     def (account, basename) = env.JOB_NAME.split('/')
     def sbatch_script = ".jenkins/${environment}.${task}.sh"
