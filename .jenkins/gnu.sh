@@ -17,6 +17,8 @@ set -o pipefail
 module avail
 
 echo "xxxx"
+uname -a
+cat /etc/os-release
 source /etc/bash.bashrc
 module list
 echo "xxxx"
