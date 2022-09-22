@@ -1,5 +1,5 @@
 #!/bin/bash -l
-#SBATCH --export=ALL
+###SBATCH --export=ALL
 #SBATCH --constraint=gpu
 #SBATCH --partition=cscsci
 #SBATCH --nodes=1
@@ -19,6 +19,8 @@ CC --version
 nvcc --version
 # module unload cray-libsci_acc
 export PATH=/project/c32/src/cmake-3.24.2-linux-x86_64/bin:$PATH
+which cmake
+cmake --version
 
 set -o xtrace  # do not set earlier to avoid noise from module
 umask 0002  # make sure group members can access the data
