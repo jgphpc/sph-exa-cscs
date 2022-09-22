@@ -9,8 +9,8 @@ pipeline {
                     stages {
                         stage('build') {
                             steps {
-                                run_lnode("gnu")
-                                // run_batch("0:10:00", "gnu", "build")
+                                // run_vnode("gnu")
+                                run_batch("0:30:00", "gnu", "build")
                             }
                         }
 //                         stage('test') {
@@ -55,28 +55,11 @@ pipeline {
     }
 }
 
-def run_lnode(environment) {
-    // def (account, basename) = env.JOB_NAME.split('/')
-    // def sbatch_script = ".jenkins/${environment}.${task}.sh"
-    // def sbatch_out = "sbatch.${env.BUILD_TAG}.${environment}.${task}.out"
-    def ln_script = ".jenkins/${environment}.sh"
-
-    // avoid using the shell for variable expansion to
-    // get the final command displayed in Jenkins
-    try {
-        sh """
-        bash -c ./${ln_script}
-        """
-    }
-    finally {
-        echo readFile("${sbatch_out}")
-    }
-}
-
 // /scratch/snx3000/jenkssl/jenkins-c32-sphexa-21.gnu/local/bin/sphexa-cuda
 def run_batch(timelimit, environment, task) {
     def (account, basename) = env.JOB_NAME.split('/')
-    def sbatch_script = ".jenkins/${environment}.${task}.sh"
+    def sbatch_script = ".jenkins/${environment}.sh"
+    // def sbatch_script = ".jenkins/${environment}.${task}.sh"
     def sbatch_out = "sbatch.${env.BUILD_TAG}.${environment}.${task}.out"
 
     // avoid using the shell for variable expansion to
@@ -96,5 +79,24 @@ def run_batch(timelimit, environment, task) {
         echo readFile("${sbatch_out}")
     }
 }
+
+def run_vnode(environment) {
+    // def (account, basename) = env.JOB_NAME.split('/')
+    // def sbatch_script = ".jenkins/${environment}.${task}.sh"
+    // def sbatch_out = "sbatch.${env.BUILD_TAG}.${environment}.${task}.out"
+    def ln_script = ".jenkins/${environment}.sh"
+
+    // avoid using the shell for variable expansion to
+    // get the final command displayed in Jenkins
+    try {
+        sh """
+        bash -c ./${ln_script}
+        """
+    }
+    finally {
+        echo readFile("${sbatch_out}")
+    }
+}
+
 
 // vim: set filetype=groovy ts=4 sw=4 tw=0 :

@@ -14,16 +14,7 @@ set -o nounset
 set -o pipefail
 
 #{{{ pe
-module avail
-
-echo "xxxx"
-uname -a
-cat /etc/os-release
-source /etc/bash.bashrc
-module list
-echo "xxxx"
 module swap PrgEnv-cray PrgEnv-gnu
-# module load PrgEnv-gnu
 module load cdt/22.05
 module load nvhpc-nompi/22.2
 module load cray-hdf5-parallel/1.12.1.3
@@ -37,7 +28,9 @@ CMAKE="echo #"
 CC --version ;echo
 nvcc --version ; echo
 $CMAKE --version ;echo
+#}}}
 
+#{{{ rundir
 set -o xtrace  # do not set earlier to avoid noise from module
 umask 0002  # make sure group members can access the data
 RUNDIR=$SCRATCH/$BUILD_TAG
@@ -92,8 +85,9 @@ RFM_TRAP_JOB_ERRORS=1 reframe -r \
 -c $WORKSPACE/.jenkins/reframe_ci.py \
 --system daint:gpu \
 -n ci_unittests.*peers_perf \
--J p=debug -J account=usup \
+-J p=cscsci \
 -S image=$PWD
 
+# -J account=usup \
 # -S image=/scratch/snx3000/piccinal/jenkins.gnu/local \
 #}}}
