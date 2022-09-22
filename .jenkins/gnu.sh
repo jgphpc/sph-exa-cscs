@@ -15,7 +15,9 @@ set -o pipefail
 
 #{{{ pe
 module avail
+
 echo "xxxx"
+source /etc/bash.bashrc
 module list
 echo "xxxx"
 module swap PrgEnv-cray PrgEnv-gnu
