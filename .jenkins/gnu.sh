@@ -1,12 +1,12 @@
 #!/bin/bash -l
 
-###SBATCH --export=ALL
+### user = jenkssl
 #SBATCH --constraint=gpu
 #SBATCH --partition=cscsci
 #SBATCH --nodes=1
-##SBATCH --ntasks-per-node=1
-##SBATCH --cpus-per-task=1
-### user = jenkssl
+###SBATCH --ntasks-per-node=1
+###SBATCH --cpus-per-task=1
+###SBATCH --export=ALL
 
 set -o errexit
 set -o nounset
