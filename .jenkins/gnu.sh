@@ -8,7 +8,6 @@
 ##SBATCH --cpus-per-task=1
 ### user = jenkssl
 
-# source /etc/profile
 set -o errexit
 set -o nounset
 set -o pipefail
