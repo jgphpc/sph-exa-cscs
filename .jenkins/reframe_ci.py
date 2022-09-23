@@ -47,7 +47,7 @@ unittests = [
     "/usr/local/sbin/integration_mpi/globaloctree",
     "/usr/local/sbin/integration_mpi/treedomain",
     # new:
-    "/usr/local/sbin/performance/neighbors_test_gpu",
+    # "/usr/local/sbin/performance/neighbors_test_gpu",
     # "/usr/local/sbin/integration_mpi/assignment_gpu",       # -N2 -n2 -pdebug
     # "/usr/local/sbin/integration_mpi/domain_gpu",           # -N2 -n2 -pdebug
     # "/usr/local/sbin/integration_mpi/exchange_domain_gpu",  # -N2 -n2 -pdebug
@@ -128,6 +128,7 @@ class ci_unittests(rfm.RunOnlyRegressionTest):
     sourcesdir = None
     num_tasks = 1
 
+    # {{{ hooks
     @run_before('run')
     def set_executable(self):
         self.executable = self.unittest.replace("/usr/local", self.image)
@@ -143,13 +144,7 @@ class ci_unittests(rfm.RunOnlyRegressionTest):
         need_2cn = ['exchange_halos_gpu', 'assignment_gpu', 'domain_gpu',
                     'exchange_domain_gpu']
         self.skip_if(test in need_2cn, f'{test} needs 2 cn')
-
-#del         if self.unittest.split('/')[-1] in [
-#del             'exchange_halos_gpu', 'assignment_gpu', 'domain_gpu',
-#del             'exchange_domain_gpu'
-#del         ]:
-#del             self.num_tasks_per_node = 1
-#del         # TODO: -pdebug
+    # }}}
 
     # {{{ sanity
     @sanity_function
