@@ -30,8 +30,8 @@ $CMAKE --version ;echo
 #}}}
 
 #{{{ rundir
-set -o xtrace  # do not set earlier to avoid noise from module
-umask 0002  # make sure group members can access the data
+set -o xtrace   # do not set earlier to avoid noise from module
+umask 0002      # make sure group members can access the data
 RUNDIR=$SCRATCH/$BUILD_TAG.gnu
 echo "# WORKSPACE=$WORKSPACE"
 echo "# RUNDIR=$RUNDIR"
